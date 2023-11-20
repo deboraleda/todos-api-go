@@ -1,0 +1,62 @@
+## User rest
+### POST user
+POST localhost:8080/user
+Content-Type: application/json
+
+{
+	"username": "nome",
+	"password": "pass"
+}
+
+### POST login
+# @name login
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+	"username": "debora",
+	"password": "souza"
+}
+
+## após fazer o request de login, substitua a variável abaixo com o valor do token retornado
+###
+@access_token = {{login.response.body.*}}
+
+## Todo-list rest
+# POST todo-list
+POST http://localhost:8080/
+Content-Type: application/json
+Authorization: bearer {{access_token}}
+
+{
+	"title": "atividades do dia 2",
+	"description": "lavar cassa, fazer o almoco",
+	"done": false
+}
+
+###
+# GET /all/todo-list
+GET http://localhost:8080/
+Authorization: bearer {{access_token}}
+
+###
+# GET /todo-list/id
+GET http://localhost:8080/8
+Authorization: bearer {{access_token}}
+
+
+### PUT /todo-list/id
+PUT http://localhost:8080/8
+Content-Type: application/json
+Authorization: bearer {{access_token}}
+
+{
+	"title": "atividades do dia",
+	"description": "fazer atividade de ingles",
+	"done": true
+}
+
+### DELETE /todo-list/id
+DELETE http://localhost:8080/8
+Authorization: bearer {{access_token}}
+
