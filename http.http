@@ -1,11 +1,11 @@
 ## User rest
 ### POST user
-POST localhost:8080/user
+POST http://localhost:8080/user
 Content-Type: application/json
 
 {
 	"username": "nome",
-	"password": "pass"
+	"password": "password"
 }
 
 ### POST login
@@ -14,8 +14,8 @@ POST http://localhost:8080/login
 Content-Type: application/json
 
 {
-	"username": "debora",
-	"password": "souza"
+	"username": "nome",
+	"password": "password"
 }
 
 ## após fazer o request de login, substitua a variável abaixo com o valor do token retornado

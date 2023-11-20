@@ -24,8 +24,8 @@ func GetUser(id int64) (user User, err error) {
 	return
 }
 
-func GetByUserName(userName string, pass string) (user User, err error) {
-	row := dbconfig.DB.QueryRow(`SELECT * FROM users WHERE username=$1 AND password=$2`, userName, pass)
+func GetByUserName(userName string) (user User, err error) {
+	row := dbconfig.DB.QueryRow(`SELECT * FROM users WHERE username=$1`, userName)
 
 	err = row.Scan(&user.ID, &user.Username, &user.Password)
 

@@ -30,7 +30,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user := models.User{Username: userRequest.Username, Password: userRequest.Password}
-	recoveredUser, err := models.GetByUserName(user.Username, user.Password)
+
+	recoveredUser, err := models.GetByUserName(user.Username)
 
 	if err != nil {
 		log.Printf("usuário não encontrado - %v", err)
@@ -38,9 +39,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	hashedpass, err := HashPassword(user.Password)
-
-	ispassWrong := CheckPasswordHash(hashedpass, recoveredUser.Password)
+	ispassWrong := CheckPasswordHash(recoveredUser.Password, userRequest.Password)
 
 	if ispassWrong {
 		log.Printf("senha incorreta")
@@ -60,6 +59,8 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	fmt.Println(userRequest)
+
 	encryptedpass, err := HashPassword(userRequest.Password)
 	if err != nil {
 		log.Printf("erro ao fazer encrypt da password %v", err)
@@ -73,15 +74,12 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	var resp map[string]any
 	if err != nil {
-		resp = map[string]any{
-			"error":   true,
-			"message": fmt.Sprintf("erro: %v", err),
-		}
+		errorMessage := ("erro -" + fmt.Sprintf("%v", err))
+		log.Printf(errorMessage)
+		utils.GenerateErrorResponse(w, errorMessage, 400)
+		return
 	} else {
-		resp = map[string]any{
-			"error":   false,
-			"message": fmt.Sprintf("user inserido com sucesso - id: %v", id),
-		}
+		utils.GenerateResponse(w, id, 200)
 	}
 
 	w.Header().Add("Content-Type", "application/json")
